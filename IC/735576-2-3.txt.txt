@@ -1,0 +1,30 @@
+(vector: .ascii16 "PATRICIA BRIONES." ; 50,41,...,2e)
+
+.data 56
+vector: .ascii16 "PATRICIA BRIONES."
+letra:  .ascii16 73
+espacio: .ascii16 " " 74
+cero:   .dw 0 75
+punto:  .ascii16 "." 76
+const:  .dw 80 77
+num:    .dw 20 78
+
+.data 127
+tty_out: .rw 1
+
+.code                              ; inicio del código (@0)
+             MOV cero, tty_out     ; borra la pantalla
+             MOV vector, letra     ; letra = vector[i]
+WHILE:       CMP letra, punto      ; si letra == '.'
+             BEQ HALT              ; salta a HALT
+	     CMP letra, espacio    ; si letra == ' '
+             BEQ A                 ; salto a A
+	     ADD num, letra        ; letra = letra + 20
+A:           MOV letra, tty_out    ; imprime "letra"
+             ADD const, INST       ; modifica instrucción acceso vector
+INST:	     MOV vector, letra     ; letra = vector[i]
+             CMP cero, cero        ; comparación para forzar
+             BEQ WHILE             ; salto a WHILE (incondicional)
+HALT:        CMP cero, cero        ; comparación para forzar
+             BEQ HALT              ; salto a HALT (bucle infinito)
+.end

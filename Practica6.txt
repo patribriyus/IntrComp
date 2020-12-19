@@ -1,0 +1,32 @@
+.data   32                        ; dirección de inicio de los datos
+vector:  .dw 1,7,12,56,-12,-3,-10,0
+suma:    .dw 0
+num:     .dw 1 ; la variable i no se utiliza
+cero:    .dw 0
+uno:     .dw 1
+const:   .dw 128
+
+.code                            ; inicio del código (@0)
+             MOV vector, num     ; num=vector[i]
+WHILE:       CMP num,cero        ; si num==0
+             BEQ HALT            ; salta a HALT
+             ADD num,suma        ; suma=suma+num;
+             ADD const,INST      ; modificar instrucción acceso vector
+INST:        MOV vector,num      ; num=vector[i]
+             CMP cero,cero       ; comparación para forzar
+             BEQ WHILE           ; salto a WHILE (incondicional)
+HALT:        CMP cero,cero       ; comparación para forzar
+             BEQ HALT            ; salto a HALT (bucle infinito)
+.end
+-------------------------------------------------------------------------
+ADD y CMP tardan 4 ciclos, MOV tarda 3 ciclos y BEQ tarda 2 ciclos.
+
+1) Apartado 2.2.g. Número de instrucciones ejecutadas y el número de ciclos 
+necesario para la ejecución (hasta llegar por primera vez a la etiqueta HALT).
+- Instrucciones: 31
+- Ciclos: 92
+
+2) Apartado 3.2.b. Número de instrucciones ejecutadas y el número de ciclos 
+necesario para la ejecución (hasta llegar por primera vez a la etiqueta HALT).
+- Instrucciones: 59
+- Ciclos: 170

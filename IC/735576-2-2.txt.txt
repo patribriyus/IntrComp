@@ -1,0 +1,39 @@
+char vector = "PATRICIA BRIONES.";
+int i;
+char letra;
+
+i = 0;
+letra = vector[i];
+while(letra != '.'){
+	letra = vector[i];
+	cout << letra << endl;
+	i = i + 1;
+}
+halt();
+
+---------------------------------------------------------------------
+(vector: .ascii16 "PATRICIA BRIONES." ; 50,41,...,2e)
+
+.data 56
+vector: .ascii16 "PATRICIA BRIONES."
+letra:  .ascii16 " " 
+cero:   .dw 0 
+punto:  .ascii16 "."
+const:  .dw 80
+
+.data 127
+tty_out: .rw 1
+
+.code                              ; inicio del código (@0)
+             MOV cero, tty_out     ; borra la pantalla
+             MOV vector, letra     ; letra = vector[i]
+BUCLE:       MOV letra, tty_out    ; imprime "letra"
+    	     CMP letra, punto      ; si letra == '.'
+             BEQ HALT              ; salta a HALT
+             ADD const, INST       ; modifica instrucción acceso vector
+INST:	     MOV vector, letra     ; letra = vector[i]
+             CMP cero, cero        ; comparación para forzar
+             BEQ BUCLE             ; salto a BUCLE (incondicional)
+HALT:        CMP cero, cero        ; comparación para forzar
+             BEQ HALT              ; salto a HALT (bucle infinito)
+.end
